@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl_PL">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu Demo</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+    var table;
+    $(document).ready(function () {
+        $.getJSON("http://pizza.dev/app_dev.php/ext/get/1", function (data) {
+            console.log(data);
+            $("#name").html(data.name);
+            $("#description").html(data.description);
+            table = data.types;
+            table.forEach(function (type) {
+                type.products.forEach(function (product) {
+                    addRow(product.name, product.description, product.prices);
+                })
+            });
+        });
+    });
+
+    function addRow(name, description, prices) {
+        var tmp = '';
+        prices.forEach(function (item) {
+            tmp = tmp + item.type + ": " + item.value + "zł <a> zamów</a><br>";
+        });
+        var table = document.getElementById("menu");
+        var row = table.insertRow(1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        cell1.innerHTML = "<b>" + name + "</b><br>" +  description;
+
+
+        a = document.createElement('a');
+        a.innerHTML = "Link";
+        a.onclick = function() {console.log(name)};
+        cell2.appendChild(a);
+    }
+
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <h3 id="name"></h3>
+            <h4 id="description"></h4>
+            <br>
+            <table id="menu" class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-body" >
+                    <h4>Twoje zamówienie:</h4>
+                    <ol id="demo"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
