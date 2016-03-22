@@ -2,4 +2,4 @@
 
 //This file is necessary only for Heroku deploy
 
-include 'index.html'
+include 'index.html';
