@@ -1,6 +1,6 @@
 // Configuration variable
-const BASIC_URL = 'http://pizza.dev/app_dev.php';
-const APPLICATION_ID = 1;
+const BASIC_URL = 'http://api-orders.herokuapp.com';
+const APPLICATION_ID = 5;
 
 var GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 var ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
