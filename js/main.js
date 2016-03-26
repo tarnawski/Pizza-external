@@ -1,11 +1,17 @@
+
 // Configuration variable
-const BASIC_URL = 'https://api-orders.herokuapp.com';
+//#############################################################################
+
+// const BASIC_URL = 'https://api-orders.herokuapp.com';
+const BASIC_URL = 'http://pizza.dev/app_dev.php';
 const APPLICATION_ID = 1;
+const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
+const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
 
-var GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
-var ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
 
 
+
+//#############################################################################
 
 var arrayOrders = [];
 
@@ -69,22 +75,33 @@ function fetchData() {
 }
 
 function refreshOrder(orders) {
-    $("#empty").hide();
-    $("#notEmpty").show();
-
-
     vm_orderList.empty();
     vm_price.empty();
+
+    if(orders.length != 0){
+        $("#empty").hide();
+        $("#notEmpty").show();
+
+
 
     var totalPrice = 0;
 
     for (var i = 0; i < orders.length; i++) {
-        vm_orderList.append('<div>' + (i + 1) + '. ' + orders[i].product + ' (' + orders[i].type + ') ' + '<span class="pull-right">' + orders[i].price + 'zł</span></div>');
+        vm_orderList.append('<div>' + (i + 1) + '. ' + orders[i].product + ' (' + orders[i].type + ') ' + '<span class="pull-right">' + orders[i].price + 'zł <a onclick="deleteItem(' + i + ')"><span class="glyphicon glyphicon-remove"></span></a></span></div>');
     }
     for (i = 0; i < orders.length; i++) {
         totalPrice += Number(orders[i].price);
     }
     vm_price.append('<h4>Całkowity koszt: ' + totalPrice + 'zł</h4>');
+
+    } else {
+        $("#empty").show();
+        $("#notEmpty").hide();
+        $("#form").hide();
+        $("#acceptButton").show();
+    }
+
+    scrolUp();
 }
 
 function showForm() {
@@ -96,6 +113,11 @@ function submit() {
     if (validForm()) {
         sendOrder();
     }
+}
+
+function deleteItem(i) {
+    arrayOrders.splice(i, 1);
+    refreshOrder(arrayOrders);
 }
 
 function validForm() {
@@ -190,4 +212,8 @@ function sendOrder() {
             $("#order").hide();
             $("#error").show();
     });
+}
+
+function scrolUp() {
+    window.scrollTo(0, 0);
 }
