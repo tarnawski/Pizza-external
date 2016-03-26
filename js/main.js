@@ -2,33 +2,37 @@
 // Configuration variable
 //#############################################################################
 
-// const BASIC_URL = 'https://api-orders.herokuapp.com';
-const BASIC_URL = 'http://pizza.dev/app_dev.php';
+const BASIC_URL = 'https://api-orders.herokuapp.com';
+// const BASIC_URL = 'http://pizza.dev/app_dev.php';
 const APPLICATION_ID = 1;
 const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
-
-
-
+const SHOW_APP_NAME = true;
+const SHOW_APP_DESC = true;
 
 //#############################################################################
 
 var arrayOrders = [];
 
 var vm_name;
-var vm_escription;
+var vm_description;
 var vm_menu;
 var vm_orderList;
 var vm_price;
+var vm_loader;
+var vm_main;
 
 $(document).ready(function () {
 
     vm_menu = $("#menu");
     vm_orderList = $("#order-list");
     vm_name = $("#name");
-    vm_escription = $("#description");
+    vm_description = $("#description");
     vm_price = $("#totalPrice");
+    vm_loader = $("#loader");
+    vm_main = $("#main");
 
+    vm_main.hide()
     $("#notEmpty").hide();
     $("#form").hide();
     $("#success").hide();
@@ -41,9 +45,13 @@ $(document).ready(function () {
 function fetchData() {
     $.getJSON(GET_URL, function (data) {
 
-        vm_name.html(data.name);
-        vm_escription.html(data.description);
-
+        hideLoader();
+        if(SHOW_APP_NAME) {
+            vm_name.html(data.name);
+        }
+        if(SHOW_APP_DESC) {
+            vm_description.html(data.description);
+        }
         var types = data.types;
 
         types.forEach(function (type) {
@@ -52,7 +60,7 @@ function fetchData() {
                 vm_menu.append('<h4>' + product.name + '</h4><h5>' + product.description + '</h5>');
                 product.prices.forEach(function (item) {
                     a = document.createElement('a');
-                    a.innerHTML =  '<button type="button" class="btn btn-default">' + item.type + '<br>' + item.value + '</button>';
+                    a.innerHTML =  '<button type="button" class="btn btn-default">' + item.type + '<br>' + item.value + 'zł</button>';
                     a.onclick = function () {
                         arrayOrders.push(
                             {
@@ -92,7 +100,7 @@ function refreshOrder(orders) {
     for (i = 0; i < orders.length; i++) {
         totalPrice += Number(orders[i].price);
     }
-    vm_price.append('<h4>Całkowity koszt: ' + totalPrice + 'zł</h4>');
+    vm_price.append('<h4>Całkowity koszt: ' + totalPrice.toFixed(2) + 'zł</h4>');
 
     } else {
         $("#empty").show();
@@ -101,7 +109,7 @@ function refreshOrder(orders) {
         $("#acceptButton").show();
     }
 
-    scrolUp();
+    scrollUp();
 }
 
 function showForm() {
@@ -113,6 +121,11 @@ function submit() {
     if (validForm()) {
         sendOrder();
     }
+}
+
+function hideLoader() {
+    vm_loader.hide();
+    vm_main.show();
 }
 
 function deleteItem(i) {
@@ -214,6 +227,6 @@ function sendOrder() {
     });
 }
 
-function scrolUp() {
+function scrollUp() {
     window.scrollTo(0, 0);
 }
