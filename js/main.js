@@ -52,7 +52,7 @@ function fetchData() {
                 vm_menu.append('<h4>' + product.name + '</h4><h5>' + product.description + '</h5>');
                 product.prices.forEach(function (item) {
                     a = document.createElement('a');
-                    a.innerHTML = item.type + ' (' + item.value + 'zł )';
+                    a.innerHTML =  '<button type="button" class="btn btn-default">' + item.type + '<br>' + item.value + '</button>';
                     a.onclick = function () {
                         arrayOrders.push(
                             {
