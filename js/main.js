@@ -2,8 +2,8 @@
 // Configuration variable
 //#############################################################################
 
-const BASIC_URL = 'https://api-pizza.herokuapp.com';
-// const BASIC_URL = 'http://pizza.dev/app_dev.php';
+//const BASIC_URL = 'https://api-orders.herokuapp.com';
+const BASIC_URL = 'http://pizza.dev/app_dev.php';
 const APPLICATION_ID = 1;
 const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
