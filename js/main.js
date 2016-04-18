@@ -3,7 +3,7 @@
 //#############################################################################
 
 //const BASIC_URL = 'https://api-orders.herokuapp.com';
- const BASIC_URL = 'http://pizza.dev/app_dev.php';
+const BASIC_URL = 'http://pizza.dev/app_dev.php';
 const APPLICATION_ID = 1;
 const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
@@ -114,13 +114,7 @@ function refreshOrder(orders) {
 
 function showForm() {
     $("#form").show();
-    $("#promocode-field").hide();
     $("#acceptButton").hide();
-}
-
-function showPromoCodeField() {
-    $("#promocode-question").hide();
-    $("#promocode-field").show();
 }
 
 function submit() {
@@ -206,7 +200,6 @@ function sendOrder() {
         phone: $("#phone").val(),
         address: $("#address").val(),
         description: $("#additional").val(),
-        promoCode: $("#promoCode").val(),
         "item": []
     };
 
