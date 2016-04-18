@@ -7,12 +7,15 @@ const BASIC_URL = 'http://pizza.dev/app_dev.php';
 const APPLICATION_ID = 1;
 const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
+const PROMOCODE_URL =BASIC_URL + "/ext/promocode/" + APPLICATION_ID;
 const SHOW_APP_NAME = true;
 const SHOW_APP_DESC = true;
 
 //#############################################################################
 
 var arrayOrders = [];
+var totalPrice = 0;
+var totalPriceWithPromo = 0;
 
 var vm_name;
 var vm_description;
@@ -21,6 +24,9 @@ var vm_orderList;
 var vm_price;
 var vm_loader;
 var vm_main;
+var vm_promo;
+
+
 
 $(document).ready(function () {
 
@@ -31,6 +37,7 @@ $(document).ready(function () {
     vm_price = $("#totalPrice");
     vm_loader = $("#loader");
     vm_main = $("#main");
+    vm_promo = $("#price-with-promo");
 
     vm_main.hide()
     $("#notEmpty").hide();
@@ -40,7 +47,40 @@ $(document).ready(function () {
 
     fetchData();
 
+    $("#promoCode").on('input',function() {
+        var data = {
+            code: $("#promoCode").val()
+        };
+        $.ajax({
+                method: "POST",
+                url: PROMOCODE_URL,
+                data: JSON.stringify(data),
+                dataType: "json"
+            })
+            .done(function( response ) {
+                console.log($("#promoCode").val());
+                console.log(response);
+                if(response.status == 'Not found'){
+                    $("#promocode-field")[0].className = 'form-group has-error';
+                }else{
+                    $("#promocode-field")[0].className = 'form-group has-success';
+                    calculate(response);
+                }
+            });
+    });
+
 });
+
+function calculate(promoCode){
+    if (promoCode.overall) {
+        totalPriceWithPromo = totalPrice - promoCode.value;
+    } else if (promoCode.percent) {
+        var discount = totalPrice/100 * promoCode.value;
+        totalPriceWithPromo = totalPrice - discount;
+    }
+    vm_promo.html('<h3> <p class="text-success">Koszt po rabacie:' + totalPriceWithPromo.toFixed(2) + ' zł</p></h3>');
+}
+
 
 function fetchData() {
     $.getJSON(GET_URL, function (data) {
@@ -92,7 +132,7 @@ function refreshOrder(orders) {
 
 
 
-    var totalPrice = 0;
+    totalPrice = 0;
 
     for (var i = 0; i < orders.length; i++) {
         vm_orderList.append('<div>' + (i + 1) + '. ' + orders[i].product + ' (' + orders[i].type + ') ' + '<span class="pull-right">' + orders[i].price + 'zł <a onclick="deleteItem(' + i + ')"><span class="glyphicon glyphicon-remove"></span></a></span></div>');
