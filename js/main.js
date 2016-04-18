@@ -115,6 +115,12 @@ function refreshOrder(orders) {
 function showForm() {
     $("#form").show();
     $("#acceptButton").hide();
+    $("#promocode-field").hide();
+}
+
+function showPromoCodeField(){
+    $("#promocode-field").show();
+    $("#promocode-question").hide();
 }
 
 function submit() {
@@ -200,6 +206,7 @@ function sendOrder() {
         phone: $("#phone").val(),
         address: $("#address").val(),
         description: $("#additional").val(),
+        promoCode: $("#promoCode").val(),
         "item": []
     };
 
