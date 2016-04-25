@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Menu Demo</title>
+    <title>Oferta Demo</title>
 
     <!-- Latest compiled and minified CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 
 </head>
 <body>
@@ -16,71 +17,87 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 
-<script>
-    var table;
-    $(document).ready(function () {
-        $.getJSON("http://pizza.dev/app_dev.php/ext/get/1", function (data) {
-            console.log(data);
-            $("#name").html(data.name);
-            $("#description").html(data.description);
-            table = data.types;
-            table.forEach(function (type) {
-                type.products.forEach(function (product) {
-                    addRow(product.name, product.description, product.prices);
-                })
-            });
-        });
-    });
+<script src="js/main.js"></script>
 
-    function addRow(name, description, prices) {
-        var tmp = '';
-        prices.forEach(function (item) {
-            tmp = tmp + item.type + ": " + item.value + "zł <a> zamów</a><br>";
-        });
-        var table = document.getElementById("menu");
-        var row = table.insertRow(1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        cell1.innerHTML = "<b>" + name + "</b><br>" +  description;
-
-
-        a = document.createElement('a');
-        a.innerHTML = "Link";
-        a.onclick = function() {console.log(name)};
-        cell2.appendChild(a);
-    }
-
-</script>
-
-
-<div class="container">
+<div id="loader" class="container">
+    <div class="text-center">
+    <img src="image/loading.gif" class="center-block">
+    <h2>Trwa ładowanie oferty...</h2>
+    </div>
+</div>
+<div id="main" class="container">
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-7">
             <h3 id="name"></h3>
             <h4 id="description"></h4>
             <br>
-            <table id="menu" class="table table-condensed">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div id="menu"></div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <br>
             <div class="panel panel-default">
-                <div class="panel-body" >
+                <div class="panel-body">
+                    <div id="order">
+
                     <h4>Twoje zamówienie:</h4>
-                    <ol id="demo"></ol>
+                    <div id="order-list"></div>
+                    <br>
+                    <div id="empty">Twoje zamówienie jest puste</div>
+                    <div id="notEmpty">
+                        <div class="pull-right" id="totalPrice"></div>
+                        <br><br>
+                        <button id="acceptButton" onclick='showForm()' class="btn btn-primary btn-sm pull-right"
+                                type="button">Zamawiam
+                        </button>
+                    </div>
+                    <div id="form">
+                        <form role="form">
+                            <div id="form-group-first-name" class="form-group">
+                                <label class="control-label" for="firstName">Imię:</label>
+                                <input type="text" class="form-control" id="firstName" placeholder="Podaj imię">
+                            </div>
+                            <div id="form-group-last-name" class="form-group">
+                                <label class="control-label" for="lastName">Nazwisko:</label>
+                                <input type="text" class="form-control" id="lastName" placeholder="Podaj Nazwisko">
+                            </div>
+                            <div id="form-group-email" class="form-group">
+                                <label class="control-label" for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" placeholder="Podaj adres email">
+                            </div>
+                            <div id="form-group-phone" class="form-group">
+                                <label class="control-label" for="phone">Numer telefonu:</label>
+                                <input type="text" class="form-control" id="phone" placeholder="Podaj numer telefonu">
+                            </div>
+                            <div id="form-group-address" class="form-group">
+                                <label class="control-label" for="address">Adres:</label>
+                                <textarea id="address" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div id="form-group-additional" class="form-group">
+                                <label class="control-label" for="additional">Informacje dodatkowe:</label>
+                                <textarea id="additional" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div id="promocode-question">
+                                <a onclick="showPromoCodeField()">Posiadam kod promocyjny</a>
+                                <br><br>
+                            </div>
+                            <div id="promocode-field" class="form-group">
+                                <label class="control-label" for="promoCode">Kod promocyjny:</label>
+                                <input type="text" class="form-control" id="promoCode" placeholder="Podaj kod promocyjny">
+                                <div class="pull-right" id="price-with-promo"></div>
+                            </div>
+                        </form>
+                        <button onclick='submit()' class="btn btn-success">Wyślij zamówienie</button>
+                    </div>
+
+
+                    </div>
+                    <div id="success"><h2>Twoje zamówienie zostało wysłane</h2></div>
+                    <div id="error"><h2>Błąd podczas wysyłania</h2></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<br><br>
 </body>
 </html>
