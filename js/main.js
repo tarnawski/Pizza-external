@@ -2,9 +2,11 @@
 // Configuration variable
 //#############################################################################
 
+var APPLICATION_ID;
+APPLICATION_ID = getParameter('app');
+console.log(APPLICATION_ID);
 const BASIC_URL = 'https://api-appmenu.herokuapp.com';
 //const BASIC_URL = 'http://pizza.dev/app_dev.php';
-const APPLICATION_ID = 1;
 const GET_URL = BASIC_URL + "/ext/get/" + APPLICATION_ID;
 const ORDER_URL = BASIC_URL + "/ext/order/" + APPLICATION_ID;
 const PROMOCODE_URL =BASIC_URL + "/ext/promocode/" + APPLICATION_ID;
@@ -13,6 +15,7 @@ const SHOW_APP_DESC = true;
 
 //#############################################################################
 
+var APPLICATION_ID;
 var arrayOrders = [];
 var totalPrice = 0;
 var totalPriceWithPromo = 0;
@@ -68,6 +71,15 @@ $(document).ready(function () {
     });
 
 });
+
+function getParameter( name, url ) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+}
 
 function calculate(promoCode){
     if (promoCode.overall) {
